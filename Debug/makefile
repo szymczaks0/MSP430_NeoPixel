@@ -10,7 +10,9 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./helpers.obj" \
 "./main.obj" \
+"./patterns.obj" \
 "./ws2812.obj" \
 "../lnk_msp430g2553.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -155,8 +157,8 @@ NeoPixelG2.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "ws2812.obj" 
-	-$(RM) "main.d" "ws2812.d" 
+	-$(RM) "helpers.obj" "main.obj" "patterns.obj" "ws2812.obj" 
+	-$(RM) "helpers.d" "main.d" "patterns.d" "ws2812.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

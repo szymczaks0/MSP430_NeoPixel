@@ -1,5 +1,7 @@
 #include <msp430.h> 
 #include "ws2812.h"
+#include "helpers.h"
+#include "patterns.h"
 #include <math.h>
 #include <stdarg.h>
 /**
@@ -8,25 +10,14 @@
  *      Author: Stephen Szymczak
  *      GitHub credit: https://github.com/mjmeli/MSP430-NeoPixel-WS2812-Library/blob/master/example/main.c
  */
-extern LED leds[NUM_LEDS] = { { 0, 0, 0 } };
-const u_char green[3] = {0, 255, 0};  // green
-const u_char blue[3] = {0, 0, 255};  // blue
-const u_char magenta[3] = {255, 0, 255};  // magenta
-const u_char yellow[3] = {255, 255, 0};  // yellow
-const u_char cyan[3] = {0, 255, 255};  // cyan
-const u_char red[3] = {255, 0, 0};  // red
-const u_char white[3] = {255, 255, 255}; //white
-const u_char off[3] = {0, 0, 0};
-
-u_char color_now[3][100];
-
-void gradualFill(u_int n, u_char r, u_char g, u_char b);
-void strobeAll(int period, int dcycle, u_char color[3]);
-void fadeAll(u_int period, u_char color1[3], u_char color2[3]);
-void breatheAll(u_int period, u_char color1[3], u_char color2[3]);
-void colorWheel(int period);
-void setPattern2(u_int period, u_char color1[3], u_char color2[3]);
-
+static u_char green[3] = {0, 255, 0};  // green
+static u_char blue[3] = {0, 0, 255};  // blue
+static u_char magenta[3] = {255, 0, 255};  // magenta
+static u_char yellow[3] = {255, 255, 0};  // yellow
+static u_char cyan[3] = {0, 255, 255};  // cyan
+static u_char red[3] = {255, 0, 0};  // red
+static u_char white[3] = {255, 255, 255}; //white
+static u_char off[3] = {0, 0, 0};
 
 int main(void) {
     WDTCTL = WDTPW + WDTHOLD;  // Stop WDT
@@ -41,33 +32,41 @@ int main(void) {
 
     // initialize LED strip
     initStrip();  // ***** HAVE YOU SET YOUR NUM_LEDS DEFINE IN WS2812.H? ******
+    /*u_char color_pattern[15];
+    int i = 0;
+    int j = 0;
+    for(i = 0; i < 5; i++){
+        for(j = 0; j < 3; j++){
+            color_pattern[5 * i + j]= j * 84;
+        }
+    }*/
+    u_char color_pattern[][3] = {
+                         {0,255,0},
+                         {0,0,255},
+                         {255,255,0}
+    };
 
+    u_char pattern[] = makePattern(color_pattern,3);
+    fillPattern(100,pattern,3);
     while (1) {
-        colorWheel(1);
+        //colorWheel(100);
+
+
+        //makePattern(3,green,cyan,magenta);
+
         //setPattern2(5000,red,green);
         //setPattern2(5000,green,red);
-        //breatheAll(100,magenta,cyan);
-        //fadeAll(100,green,red);
-        //fadeAll(100,red,green);
+        //breatheAll(15,magenta,cyan);
+        //fadeAll(100,blue,magenta);
+        //fadeAll(100,magenta,blue);
         //fadeall(100,red,off);
         //fadeall(100,off,green);
         //gradualFill(NUM_LEDS, 0, 255, 0);  // green
         //gradualFill(NUM_LEDS, 255, 0, 0);  // blue
-        //strobeAll(5,50, white);
+        //strobeAll(14,50, red);
     }
 }
 
-void gradualFill(u_int n, u_char r, u_char g, u_char b){
-    int i;
-    int count;
-    for (i = 0; i < n; i++){        // n is number of LEDs
-        setLEDColor(i, r, g, b);
-        showStrip();
-        for(count = 0; count < 250; count++){
-        _delay_cycles(10000);       // lazy delay
-        }
-    }
-}
 /*
 gradualFill(NUM_LEDS, 0, 255, 0);  // green
 gradualFill(NUM_LEDS, 0, 0, 255);  // blue
@@ -77,89 +76,13 @@ gradualFill(NUM_LEDS, 0, 255, 255);  // cyan
 gradualFill(NUM_LEDS, 255, 0, 0);  // red
 */
 
-void strobeAll(int period,int dcycle, u_char color[3]) {
-    int i;
 
-    const int dcycleOn = period * dcycle;
-    const int dcycleOff = period * (100 - dcycle);
-
-    fillStrip(color[0], color[1], color[2]);
-    for (i = 0; i < dcycleOn; i++){
-        _delay_cycles(1000);
-    }
-    i = 0;
-
-    //showStrip();
-    clearStrip();
-    for (i = 0; i < dcycleOff; i++){
-        _delay_cycles(1000);
-    }
-}
-//color1 is 50 50 50. color 2 is 200 200 20
-void fadeAll(u_int period, u_char color1[3], u_char color2[3]){
-        int i = 0;
-        float j = 0;
-        float color_current[3];
-        float slope[3];
-        color_current[0] = color1[0];
-        color_current[1] = color1[1];
-        color_current[2] = color1[2];
-
-        slope[0] = color2[0] - color1[0];
-        slope[1] = color2[1] - color1[1];
-        slope[2] = color2[2] - color1[2];
-
-        while (j < 1){
-            for (i = 0; i < 3; i++){
-                    color_current[i] = color1[i] + round(slope[i]*j);
-            }
-            fillStrip(color_current[0], color_current[1], color_current[2]);
-            for (i = 0; i < period; i++){
-                _delay_cycles(1000);
-            }
-            j += 0.005;
-        }
-}
     //fillStrip(theColors[1][1], theColors[1][2], theColors[1][3]);
    // fillStrip(theColors[2][1], theColors[2][2], theColors[2][3]);
    // fillStrip(theColors[3][1], theColors[3][2], theColors[3][3]);
 
-void colorWheel(int period){
-    fadeAll(period,green,cyan);
-    fadeAll(period,cyan,blue);
-    fadeAll(period,blue,magenta);
-    fadeAll(period,magenta,red);
-    fadeAll(period,red,yellow);
-    fadeAll(period,yellow,green);
-}
 
-void colorNow(void){
-    int i = 0;
-    for(i = 0; i < NUM_LEDS; i++){
-       color_now[0][i] = leds[i].red;
-       color_now[1][i] = leds[i].green;
-       color_now[2][i] = leds[i].blue;
-    }
-}
 
-void breatheAll(u_int period, u_char color1[3], u_char color2[3]){
-    int i = 0;
-    fadeAll(period,color1,off);
-    fadeAll(period,off,color2);
-    fadeAll(period,color2,off);
-    fadeAll(period,off,color1);
 
-}
 
-void setPattern2(u_int period, u_char color1[3], u_char color2[3]){
-    int i = 0;
-    for(i = 0; i < NUM_LEDS; i++){
-        setLEDColor(i, color1[0], color1[1], color1[2]);
-        i++;
-        setLEDColor(i, color2[0], color2[1], color2[2]);
-    }
-    showStrip();
-    for (i = 0; i < period; i++){
-        _delay_cycles(1000);
-    }
-}
+

@@ -7,6 +7,8 @@ main.obj: C:/ti/ccsv8/ccs_base/msp430/include/in430.h
 main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/intrinsics.h
 main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/intrinsics_legacy_undefs.h
 main.obj: ../ws2812.h
+main.obj: ../helpers.h
+main.obj: ../patterns.h
 main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/math.h
 main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/_ti_config.h
 main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/linkage.h
@@ -24,6 +26,8 @@ C:/ti/ccsv8/ccs_base/msp430/include/in430.h:
 C:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/intrinsics.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/intrinsics_legacy_undefs.h: 
 ../ws2812.h: 
+../helpers.h: 
+../patterns.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/math.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/_ti_config.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/linkage.h: 

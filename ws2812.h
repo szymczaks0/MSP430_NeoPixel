@@ -8,8 +8,10 @@
 
 // Configuration - SET THESE!
 // Configuration - SET THESE!
+#ifndef WS2812_H_
+#define WS2812_H_
 #define OUTPUT_PIN  (0x80)  // Set to whatever UCB0SIMO is on your processor (Px.7 here)
-#define NUM_LEDS    (5)    // NUMBER OF LEDS IN YOUR STRIP
+#define NUM_LEDS    (100)    // NUMBER OF LEDS IN YOUR STRIP
 
 // Useful typedefs
 typedef unsigned char u_char;   // 8 bit
@@ -38,3 +40,4 @@ void clearStrip(void);
 
 // Fill the strip with a solid color. This will update the strip.
 void fillStrip(u_char r, u_char g, u_char b);
+#endif /* WS2812_H_ */
