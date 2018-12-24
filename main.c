@@ -10,6 +10,7 @@
  *      Author: Stephen Szymczak
  *      GitHub credit: https://github.com/mjmeli/MSP430-NeoPixel-WS2812-Library/blob/master/example/main.c
  */
+
 static u_char green[3] = {0, 255, 0};  // green
 static u_char blue[3] = {0, 0, 255};  // blue
 static u_char magenta[3] = {255, 0, 255};  // magenta
@@ -40,18 +41,21 @@ int main(void) {
             color_pattern[5 * i + j]= j * 84;
         }
     }*/
-    u_char color_pattern[][3] = {
-                         {0,255,0},
-                         {0,0,255},
-                         {255,255,0}
+    u_char color_pattern1[][3] = {
+                         {25,50,75},
+                         {100,125,150},
+                         {175,200,225}
     };
+    u_char *pattern1_ptr;
+    pattern1_ptr = makePattern(color_pattern1,3);
+    //fillPattern(10,pattern1,3);
 
-    u_char pattern[] = makePattern(color_pattern,3);
-    fillPattern(100,pattern,3);
     while (1) {
         //colorWheel(100);
-
-
+        //shift(1,50,pattern1,3);
+        shift(1,50,pattern1_ptr,3);
+        //fillPattern(10,pattern1_ptr,3);
+        //pattern1_ptr = makePattern(color_pattern1,3);
         //makePattern(3,green,cyan,magenta);
 
         //setPattern2(5000,red,green);

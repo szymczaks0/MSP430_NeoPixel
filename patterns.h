@@ -13,7 +13,7 @@
 void gradualFill(u_int n, u_char r, u_char g, u_char b);
 
 //Strobe light effect that can have varying speed and colors needs to be in a loop to appear to strobe.
-void strobeAll(int period,int dcycle, u_char color[3]);
+void strobeAll(u_int period, u_char pattern[],u_int pattern_length);
 
 //Starts at color1 and "fades" to color2, speed is dependent on period.
 void fadeAll(u_int period, u_char color1[3], u_char color2[3]);
@@ -28,6 +28,9 @@ void breatheAll(u_int period, u_char color1[3], u_char color2[3]);
 void setPattern2(u_int period, u_char color1[3], u_char color2[3]);
 
 //Takes an array pattern, in which each set of 3 indices contains r g and b values.
-void fillPattern(u_int period, u_char* pattern,u_int pattern_length);
+void fillPattern(u_int period, u_char pattern[], u_int pattern_length);
+
+//Shift pattern right (right = 1) or left (right = 0), time spent in this function dependent on period.
+void shift(char right, u_int period, u_char pattern[], u_int pattern_length);
 
 #endif /* PATTERNS_H_ */

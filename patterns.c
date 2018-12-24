@@ -9,8 +9,8 @@
 #include "patterns.h"
 #include <math.h>
 #include <stdarg.h>
+#include "ws2812.h"
 
-//extern LED leds[NUM_LEDS] = { { 0, 0, 0 } };
 static u_char green[3] = {0, 255, 0};  // green
 static u_char blue[3] = {0, 0, 255};  // blue
 static u_char magenta[3] = {255, 0, 255};  // magenta
@@ -32,13 +32,13 @@ void gradualFill(u_int n, u_char r, u_char g, u_char b){
     }
 }
 
-void strobeAll(int period,int dcycle, u_char color[3]) {
+void strobeAll(u_int period, u_char pattern[],u_int pattern_length) {
     int i;
 
-    const int dcycleOn = period * dcycle;
-    const int dcycleOff = period * (100 - dcycle);
+    const int dcycleOn = period * 50;
+    const int dcycleOff = period * 50;
 
-    fillStrip(color[0], color[1], color[2]);
+    fillPattern(period,pattern,pattern_length);
     for (i = 0; i < dcycleOn; i++){
         _delay_cycles(1000);
     }
@@ -92,7 +92,16 @@ void breatheAll(u_int period, u_char color1[3], u_char color2[3]){
     fadeAll(period,off,color1);
 
 }
+/*
+void breatheAll(u_int period, u_char color1[3], u_char color2[3]){
+    fadeAll(period,color1,off);
+    fadeAll(period,off,color2);
+    fadeAll(period,color2,off);
+    fadeAll(period,off,color1);
 
+}
+
+ */
 void setPattern2(u_int period, u_char color1[3], u_char color2[3]){
     int i = 0;
     for(i = 0; i < NUM_LEDS; i++){
@@ -106,15 +115,17 @@ void setPattern2(u_int period, u_char color1[3], u_char color2[3]){
     }
 }
 
-void fillPattern(u_int period, u_char* pattern,u_int pattern_length){
-    u_char color[3];
+void fillPattern(u_int period, u_char pattern[], u_int pattern_length){
     int i = 0;
     int j = 0;
     int k = 0;
+    u_char color[3];
+    u_char *pattern_ptr;
+    pattern_ptr = pattern;
     while(i < NUM_LEDS){
         for(j = 0; j < pattern_length; j++){
             for(k = 0; k < 3; k++){
-                color[k]=pattern[pattern_length * j + k];
+                color[k]=*(pattern_ptr + j * pattern_length + k);
             }
             setLEDColor(i,color[0],color[1],color[2]);
             i++;
@@ -126,6 +137,31 @@ void fillPattern(u_int period, u_char* pattern,u_int pattern_length){
     }
 }
 
-
+void shift(char right, u_int period, u_char pattern[], u_int pattern_length){
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    u_char color[3];
+    u_char *pattern_ptr;
+    pattern_ptr = pattern;
+    while(i < NUM_LEDS){
+        for(j = 0; j < pattern_length - 1; j++){
+            for(k = 0; k < 3; k++){
+                color[k]=*(pattern_ptr + j * pattern_length + k + 3);
+            }
+            setLEDColor(i,color[0],color[1],color[2]);
+            i++;
+        }
+        for(k = 0; k < 3; k++){
+            color[k]=*(pattern_ptr + k);
+        }
+        setLEDColor(i,color[0],color[1],color[2]);
+        i++;
+    }
+    showStrip();
+    for (i = 0; i < (period * 50); i++){
+        _delay_cycles(1000);
+    }
+}
 
 
