@@ -11,16 +11,16 @@
  *      GitHub credit: https://github.com/mjmeli/MSP430-NeoPixel-WS2812-Library/blob/master/example/main.c
  */
 
-static u_char green[3] = {0, 255, 0};  // green
-static u_char blue[3] = {0, 0, 255};  // blue
-static u_char magenta[3] = {255, 0, 255};  // magenta
-static u_char yellow[3] = {255, 255, 0};  // yellow
-static u_char cyan[3] = {0, 255, 255};  // cyan
-static u_char red[3] = {255, 0, 0};  // red
-static u_char white[3] = {255, 255, 255}; //white
-static u_char off[3] = {0, 0, 0};
+static u_int green[3] = {0, 255, 0};  // green
+static u_int blue[3] = {0, 0, 255};  // blue
+static u_int magenta[3] = {255, 0, 255};  // magenta
+static u_int yellow[3] = {255, 255, 0};  // yellow
+static u_int cyan[3] = {0, 255, 255};  // cyan
+static u_int red[3] = {255, 0, 0};  // red
+static u_int white[3] = {255, 255, 255}; //white
+static u_int off[3] = {0, 0, 0};
 
-int main(void) {
+char main(void) {
     WDTCTL = WDTPW + WDTHOLD;  // Stop WDT
     if (CALBC1_16MHZ==255)    // If calibration constant erased
     {
@@ -33,20 +33,20 @@ int main(void) {
 
     // initialize LED strip
     initStrip();  // ***** HAVE YOU SET YOUR NUM_LEDS DEFINE IN WS2812.H? ******
-    /*u_char color_pattern[15];
-    int i = 0;
-    int j = 0;
+    /*u_int color_pattern[15];
+    char i = 0;
+    char j = 0;
     for(i = 0; i < 5; i++){
         for(j = 0; j < 3; j++){
             color_pattern[5 * i + j]= j * 84;
         }
     }*/
-    u_char color_pattern1[][3] = {
-                         {25,50,75},
-                         {100,125,150},
-                         {175,200,225}
+    u_int color_pattern1[][3] = {
+                                  {255,255,0},
+                                  {0,255,255},
+                                  {255,0,255}
     };
-    u_char *pattern1_ptr;
+    u_int *pattern1_ptr;
     pattern1_ptr = makePattern(color_pattern1,3);
     //fillPattern(10,pattern1,3);
 
@@ -55,7 +55,7 @@ int main(void) {
         //shift(1,50,pattern1,3);
         shift(1,50,pattern1_ptr,3);
         //fillPattern(10,pattern1_ptr,3);
-        //pattern1_ptr = makePattern(color_pattern1,3);
+        pattern1_ptr = makePattern(color_pattern1,3);
         //makePattern(3,green,cyan,magenta);
 
         //setPattern2(5000,red,green);
